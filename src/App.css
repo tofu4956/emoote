@@ -28,6 +28,22 @@
   color: #61dafb;
 }
 
+.emoji-picker {
+  margin: 0.5rem 0;
+}
+
+/* header */
+
+.bg-light {
+	background-color: #f8f9fa !important;
+}
+.py-3 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+.mt-auto {
+    margin-top: auto !important;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

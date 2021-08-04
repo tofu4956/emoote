@@ -15,12 +15,11 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: 18px;
   color: white;
 }
 
@@ -28,22 +27,25 @@
   color: #61dafb;
 }
 
-.emoji-picker {
-  margin: 0.5rem 0;
+footer{
+  position: fixed;
+  height:56px;
+  width:100%;
+  bottom:0;
 }
-
 /* header */
 
 .bg-light {
-	background-color: #f8f9fa !important;
+	background-color: #282c34 !important;
 }
 .py-3 {
-    padding-top: 1rem !important;
-    padding-bottom: 1rem !important;
+    padding-top: 1rem!important;
+    padding-bottom: 1rem!important;
 }
 .mt-auto {
-    margin-top: auto !important;
+    margin-top: auto!important;
 }
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

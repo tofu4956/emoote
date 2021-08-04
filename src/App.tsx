@@ -1,11 +1,11 @@
-import React, { ChangeEvent, useCallback, useRef } from 'react';
-import logo from './logo.svg';
-import { Button } from 'react-bootstrap';
+import React, { ChangeEvent, useCallback, useRef, useState } from 'react';
 import { EmojiObject, EmojiPicker, EmojiPickerRef, throttleIdleTask, unifiedToNative } from 'react-twemoji-picker';
 import EmojiData from "react-twemoji-picker/data/twemoji.json";
 import "react-twemoji-picker/dist/EmojiPicker.css"
 import "react-twemoji-picker/dist/Emoji.css"
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
+import { Form, Button } from 'react-bootstrap';
 
 const copyToClipboard = async (string: string) => {
   try {
@@ -27,7 +27,7 @@ const copyToClipboard = async (string: string) => {
 function App() {
   const picker = useRef<EmojiPickerRef>(null)
   const input = useRef<HTMLInputElement>(null)
-
+  const [selectedEmoji, setEmoji] =  useState("");
   // need reference to same function to throttle
   const throttledQuery = useCallback(throttleIdleTask((query: string) => picker.current?.search(query)), [picker.current]);
   const inputProps = {
@@ -44,7 +44,7 @@ function App() {
   }
   const onEmojiSelect = (emoji: EmojiObject) => {
     const nativeEmoji = unifiedToNative(emoji.unicode);
-    copyToClipboard(nativeEmoji);
+    setEmoji(nativeEmoji);
     console.log(emoji);
   }
   const emojiPickerProps = {
@@ -57,26 +57,16 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Foooooooooooooo!!!!!!
+        <a href="https://github.com/tofu4956/emoote">
+          ❗This application is PoC version. Stored data may be removed.❗
         </a>
-        <Button
-          href="./App.tsx" 
-          variant="primary"
-        >
-          Hello?
-        </Button>{}
+        </header>
+        <h2> What is your feelings? </h2>
+        <Form>
+        <Form.Control plaintext readOnly value={selectedEmoji}/>
+        </Form>
+        <Button onClick={()=>setEmoji("")}>Clear</Button>
         <EmojiPicker {...emojiPickerProps}/>
-      </header>
     </div>
   );
 }

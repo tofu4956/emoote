@@ -1,0 +1,16 @@
+fragment entrydata on Entry{
+    id
+    createddate
+    entry
+}
+
+query entry{
+    $id: ID
+    $createdtime: DateTime
+    $entry: String
+    entry(
+        id: $id
+        createdtime: $createddate
+        entry: $entry
+    )
+}

@@ -5,27 +5,22 @@ import "react-twemoji-picker/dist/EmojiPicker.css"
 import "react-twemoji-picker/dist/Emoji.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, ButtonGroup } from 'react-bootstrap';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/react-hooks';
 import { BrowserRouter, Route } from 'react-router-dom';
-
-const copyToClipboard = async (string: string) => {
-  try {
-    // Try to use the Async Clipboard API with fallback to the legacy approach.
-    // @ts-ignore
-    const {state} = await navigator.permissions.query({name: 'clipboard-write'});
-    if (state !== 'granted') { throw new Error('Clipboard permission not granted'); }
-    await navigator.clipboard.writeText(string);
-  } catch {
-    const textArea = document.createElement('textarea');
-    textArea.value = string;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-  }
-};
+import Showentry from './Showentry';
 
 function App() {
+  const cache_entry = new InMemoryCache();
+  const cache_login = new InMemoryCache();
+  const client_entry = new ApolloClient({
+    uri: "http://localhost:8000/graphql",
+    cache: cache_entry,
+  });
+  const client_login = new ApolloClient({
+   uri: "http://localhost:8001/graphql",
+    cache: cache_login,
+  })
   const picker = useRef<EmojiPickerRef>(null)
   const input = useRef<HTMLInputElement>(null)
   const [selectedEmoji, setEmoji] =  useState("");
@@ -57,6 +52,7 @@ function App() {
   }
   return (
     <BrowserRouter>
+    <ApolloProvider client={client_entry}>
     <div className="App">
       <header className="App-header">
           <a href="https://github.com/tofu4956/emoote">
@@ -68,16 +64,23 @@ function App() {
         <Form>
          <Form.Control plaintext readOnly value={selectedEmoji}/>
         </Form>
-        <Button onClick={()=>setEmoji("")}>Clear</Button>
+        <ButtonGroup size="lg" className="mb-2">
+          <Button >これ！</Button>
+          <Button variant="warning" onClick={()=>setEmoji("")}>選び直す</Button>
+        </ButtonGroup>
         <EmojiPicker {...emojiPickerProps}/>
+
       </Route>
       <Route path="/login" component={login}/>
+      <Route path="/entry" component={Showentry}/>
       </div>
+    </ApolloProvider>
     </BrowserRouter>
   );
   function login(){
     return(
       <div className="login">
+        <ApolloProvider client={client_login}>
         <h1>Login</h1>
         <Form>
          <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -95,6 +98,7 @@ function App() {
          Login
         </Button>
        </Form>
+       </ApolloProvider>
       </div>
     );
   }

@@ -6,6 +6,7 @@ import "react-twemoji-picker/dist/Emoji.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 import { Form, Button } from 'react-bootstrap';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 const copyToClipboard = async (string: string) => {
   try {
@@ -55,20 +56,48 @@ function App() {
     collapseHeightOnSearch: false,
   }
   return (
+    <BrowserRouter>
     <div className="App">
       <header className="App-header">
-        <a href="https://github.com/tofu4956/emoote">
-          ❗This application is PoC version. Stored data may be removed.❗
-        </a>
-        </header>
-        <h2> What is your feelings? </h2>
+          <a href="https://github.com/tofu4956/emoote">
+            ❗This application is PoC version. Stored data may be removed.❗
+          </a>
+      </header>
+      <Route path="/app">
+        <h2> 今の気持ちは？ </h2>
         <Form>
-        <Form.Control plaintext readOnly value={selectedEmoji}/>
+         <Form.Control plaintext readOnly value={selectedEmoji}/>
         </Form>
         <Button onClick={()=>setEmoji("")}>Clear</Button>
         <EmojiPicker {...emojiPickerProps}/>
-    </div>
+      </Route>
+      <Route path="/login" component={login}/>
+      </div>
+    </BrowserRouter>
   );
+  function login(){
+    return(
+      <div className="login">
+        <h1>Login</h1>
+        <Form>
+         <Form.Group className="mb-3" controlId="formBasicEmail">
+           <Form.Label>Email address</Form.Label>
+           <Form.Control type="email" placeholder="Enter email" />
+         </Form.Group>
+         <Form.Group className="mb-3" controlId="formBasicPassword">
+           <Form.Label>Password</Form.Label>
+           <Form.Control type="password" placeholder="Password" />
+           </Form.Group>
+           <Form.Group className="mb-3" controlId="formBasicCheckbox">
+             <Form.Check type="checkbox" label="Check me out" />
+           </Form.Group>
+         <Button variant="primary" type="submit">
+         Login
+        </Button>
+       </Form>
+      </div>
+    );
+  }
 }
 
 export default App;

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useRef, useState } from 'react';
+import React, { ChangeEvent, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { EmojiObject, EmojiPicker, EmojiPickerRef, throttleIdleTask, unifiedToNative } from 'react-twemoji-picker';
 import EmojiData from "react-twemoji-picker/data/twemoji.json";
 import "react-twemoji-picker/dist/EmojiPicker.css"
@@ -6,23 +6,17 @@ import "react-twemoji-picker/dist/Emoji.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 import { Form, Button, ButtonGroup } from 'react-bootstrap';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/react-hooks';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Link, Route } from 'react-router-dom';
 import Showentry from './Showentry';
+import Login from './Login'
+import {CredentialContext, CredentialProvider} from './Authentication'
+import CreateEntry from './CreateEntry';
+import Switch from 'react-bootstrap/esm/Switch';
 
-function App() {
-  const cache_entry = new InMemoryCache();
-  const cache_login = new InMemoryCache();
-  const client_entry = new ApolloClient({
-    uri: "http://localhost:8000/graphql",
-    cache: cache_entry,
-  });
-  const client_login = new ApolloClient({
-   uri: "http://localhost:8001/graphql",
-    cache: cache_login,
-  })
+function App(props: any) {
   const picker = useRef<EmojiPickerRef>(null)
   const input = useRef<HTMLInputElement>(null)
+  const {currentUser} = useContext(CredentialContext);
   const [selectedEmoji, setEmoji] =  useState("");
   // need reference to same function to throttle
   const throttledQuery = useCallback(throttleIdleTask((query: string) => picker.current?.search(query)), [picker.current]);
@@ -50,58 +44,40 @@ function App() {
     showFooter: true,
     collapseHeightOnSearch: false,
   }
+  useEffect(() => {
+    // if not logged in, redirect to login page
+    currentUser === null && props.history.push("/login");
+  }, [currentUser, props.history]);
   return (
     <BrowserRouter>
-    <ApolloProvider client={client_entry}>
+    <Switch>
+      <CredentialProvider>
     <div className="App">
       <header className="App-header">
           <a href="https://github.com/tofu4956/emoote">
             ❗This application is PoC version. Stored data may be removed.❗
           </a>
+          <ul>
+              <li>
+                <Link to="/login">login</Link>
+              </li>
+              <li>
+                <Link to="/app">main page</Link>
+              </li>
+              <li>
+                <Link to="/entry">entry page</Link>
+              </li>
+            </ul>
       </header>
-      <Route path="/app">
-        <h2> 今の気持ちは？ </h2>
-        <Form>
-         <Form.Control plaintext readOnly value={selectedEmoji}/>
-        </Form>
-        <ButtonGroup size="lg" className="mb-2">
-          <Button >これ！</Button>
-          <Button variant="warning" onClick={()=>setEmoji("")}>選び直す</Button>
-        </ButtonGroup>
-        <EmojiPicker {...emojiPickerProps}/>
-
-      </Route>
-      <Route path="/login" component={login}/>
+      <Route path="/"/>
+      <Route path="/app" component={CreateEntry}/>
+      <Route path="/login" component={Login}/>
       <Route path="/entry" component={Showentry}/>
       </div>
-    </ApolloProvider>
+      </CredentialProvider>
+      </Switch>
     </BrowserRouter>
   );
-  function login(){
-    return(
-      <div className="login">
-        <ApolloProvider client={client_login}>
-        <h1>Login</h1>
-        <Form>
-         <Form.Group className="mb-3" controlId="formBasicEmail">
-           <Form.Label>Email address</Form.Label>
-           <Form.Control type="email" placeholder="Enter email" />
-         </Form.Group>
-         <Form.Group className="mb-3" controlId="formBasicPassword">
-           <Form.Label>Password</Form.Label>
-           <Form.Control type="password" placeholder="Password" />
-           </Form.Group>
-           <Form.Group className="mb-3" controlId="formBasicCheckbox">
-             <Form.Check type="checkbox" label="Check me out" />
-           </Form.Group>
-         <Button variant="primary" type="submit">
-         Login
-        </Button>
-       </Form>
-       </ApolloProvider>
-      </div>
-    );
-  }
 }
 
 export default App;

@@ -65,26 +65,27 @@ export default function CreateEntry(props: any){
           collapseHeightOnSearch: false,
   }
   useEffect(() => {
-      // if not logged in, redirect to login page
+      //login detection
       currentUser === null && props.history.push("/login");
       }, [currentUser, props.history]);
-  async function entrySubmitHandler(e: any){
-    console.log(selectedEmoji.length);
-    try{
-      if(selectedEmoji.length === 2){
-      const docRef = await addDoc(collection(db, "entrydata"), {
-        userid: currentUser !== (null) ? (currentUser !== (undefined) ? currentUser.uid : undefined) : null,  
-        entry: selectedEmoji
-      });
-        console.log(docRef.id);
-      }else if(selectedEmoji.length === 0){
-      }else{
-        throw new Error("lengthError: If you change the element using Inspector tool or bot, please don't. Breaking the concept of application is not welcome.");
+    async function entrySubmitHandler(e: any){
+      console.log(selectedEmoji.length);
+      try{
+        if(selectedEmoji.length === 2){
+        const docRef = await addDoc(collection(db, "entrydata"), {
+          userid: currentUser !== (null) ? (currentUser !== (undefined) ? currentUser.uid : undefined) : null,  
+          entry: selectedEmoji,
+          date: new Date()
+        });
+          console.log(docRef.id);
+        }else if(selectedEmoji.length === 0){
+        }else{
+          throw new Error("lengthError: If you change the element using Inspector tool or bot, please don't. Breaking the concept of application is not welcome.");
+        }
+      }catch(e){
+        console.error("error adding content:", e);
+        alert("error!");
       }
-    }catch(e){
-      console.error("error adding content:", e);
-      alert("error!");
-    }
     e.preventDefault();
   }
   return(

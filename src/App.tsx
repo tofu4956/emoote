@@ -12,6 +12,7 @@ import Login from './Login'
 import {CredentialContext, CredentialProvider} from './Authentication'
 import CreateEntry from './CreateEntry';
 import Switch from 'react-bootstrap/esm/Switch';
+import TopPage from './TopPage';
 
 function App(props: any) {
   const picker = useRef<EmojiPickerRef>(null)
@@ -69,7 +70,7 @@ function App(props: any) {
               </li>
             </ul>
       </header>
-      <Route path="/"/>
+      <Route path="/" component={TopPage}/>
       <Route path="/app" component={CreateEntry}/>
       <Route path="/login" component={Login}/>
       <Route path="/entry" component={Showentry}/>

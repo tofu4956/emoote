@@ -13,6 +13,7 @@ import { getFirestore } from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore";
 import apiData from "./apiKey";
 import { selectHttpOptionsAndBody } from "@apollo/client";
+import split from "graphemesplit";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -69,16 +70,16 @@ export default function CreateEntry(props: any){
       currentUser === null && props.history.push("/login");
       }, [currentUser, props.history]);
     async function entrySubmitHandler(e: any){
-      console.log(selectedEmoji.length);
+      console.log(split(selectedEmoji).length);
       try{
-        if(selectedEmoji.length === 2){
+        if(split(selectedEmoji).length === 1){
         const docRef = await addDoc(collection(db, "entrydata"), {
           userid: currentUser !== (null) ? (currentUser !== (undefined) ? currentUser.uid : undefined) : null,  
           entry: selectedEmoji,
           date: new Date()
         });
           console.log(docRef.id);
-        }else if(selectedEmoji.length === 0){
+        }else if(split(selectedEmoji).length === 0){
         }else{
           throw new Error("lengthError: If you change the element using Inspector tool or bot, please don't. Breaking the concept of application is not welcome.");
         }

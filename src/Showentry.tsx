@@ -102,7 +102,7 @@ function Entries(props: any){
       <div>
       <h1>💁‍今までの気持ち💁‍</h1>
       <ul>{entrylist.map((entry) => (
-            <li>{JSON.stringify(entry)}</li>
+            <li>{entry.entry}</li>
             ))}</ul>
       </div>
       )

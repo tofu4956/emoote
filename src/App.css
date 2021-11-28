@@ -46,6 +46,9 @@ footer{
     margin-top: auto!important;
 }
 
+.button-data {
+    text-align: right;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

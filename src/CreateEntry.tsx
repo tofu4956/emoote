@@ -1,5 +1,5 @@
-import { ChangeEvent, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { EmojiObject, EmojiPicker, EmojiPickerRef, throttleIdleTask, unifiedToNative } from "react-twemoji-picker";
+import { useContext, useEffect, useState } from "react";
+import { EmojiObject, EmojiPicker, unifiedToNative } from "react-twemoji-picker";
 import { CredentialContext } from "./Authentication";
 import EmojiData from "react-twemoji-picker/data/twemoji.json";
 import "react-twemoji-picker/dist/EmojiPicker.css"
@@ -9,10 +9,9 @@ import './App.css';
 import { Form, Button, ButtonGroup } from 'react-bootstrap';
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore } from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore";
 import apiData from "./apiKey";
-import { selectHttpOptionsAndBody } from "@apollo/client";
 import split from "graphemesplit";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -30,29 +29,15 @@ const firebaseConfig = {
     measurementId: apiData.measurementId
   };
   // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore();
-  const analytics = getAnalytics(app);
+const app = initializeApp(firebaseConfig);
+const db = initializeFirestore(app, {experimentalForceLongPolling: true});
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const analytics = getAnalytics(app);
 
 export default function CreateEntry(props: any){
-  const picker = useRef<EmojiPickerRef>(null)
-    const input = useRef<HTMLInputElement>(null)
-    const {currentUser} = useContext(CredentialContext);
+  const {currentUser} = useContext(CredentialContext);
   const [selectedEmoji, setEmoji] =  useState("");
   // need reference to same function to throttle
-  const throttledQuery = useCallback(throttleIdleTask((query: string) => picker.current?.search(query)), [picker.current]);
-  const inputProps = {
-     ref: input,
-     placeholder: "search-or-navigate",
-     onChange: (event: ChangeEvent<HTMLElement>) => throttledQuery((event.target as HTMLInputElement).value.toLowerCase()),
-     onKeyDown: (event: React.KeyboardEvent<HTMLElement>) => { 
-       if (!["Enter", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-       picker.current?.handleKeyDownScroll(event); 
-       if (event.key === "Enter" && !event.shiftKey) {
-         picker.current?.search("");
-       }
-     },
-  }
   const onEmojiSelect = (emoji: EmojiObject) => {
     const nativeEmoji = unifiedToNative(emoji.unicode);
     setEmoji(nativeEmoji);
@@ -70,15 +55,16 @@ export default function CreateEntry(props: any){
       currentUser === null && props.history.push("/login");
       }, [currentUser, props.history]);
     async function entrySubmitHandler(e: any){
-      console.log(split(selectedEmoji).length);
       try{
-        if(split(selectedEmoji).length === 1){
+        if(split(selectedEmoji).length !== 0){
         const docRef = await addDoc(collection(db, "entrydata"), {
           userid: currentUser !== (null) ? (currentUser !== (undefined) ? currentUser.uid : undefined) : null,  
           entry: selectedEmoji,
           date: new Date()
         });
+          console.log(split(selectedEmoji).length);
           console.log(docRef.id);
+          console.log("ok");
         }else if(split(selectedEmoji).length === 0){
         }else{
           throw new Error("lengthError: If you change the element using Inspector tool or bot, please don't. Breaking the concept of application is not welcome.");

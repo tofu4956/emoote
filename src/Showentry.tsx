@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState }  from "react";
-import { Alert } from "react-bootstrap";
 import apiData from "./apiKey";
 import 'firebase/auth'
 import 'firebase/app'
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { getFirestore, query, where } from "firebase/firestore";
-import { collection, addDoc, getDocs} from "firebase/firestore";
-import { CredentialContext, CredentialProvider } from "./Authentication";
+import { initializeFirestore, query, where } from "firebase/firestore";
+import { collection, getDocs} from "firebase/firestore";
+import { CredentialContext } from "./Authentication";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -24,17 +23,11 @@ apiKey: apiData.apiKey,
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore();
+const db = initializeFirestore(app, {experimentalForceLongPolling: true});
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const analytics = getAnalytics(app);
 
 
-// test only query;
-
-type entry ={
-entry: string;
-userid: string;
-date: string;
-}
 /*
    class Entry {
 entry: string;
@@ -74,7 +67,7 @@ return new Entry(data.entry,data.userid,data.date);
 */
 function Entries(props: any){
   const {currentUser} = useContext(CredentialContext)
-    const uid = currentUser !== (null) ? (currentUser !== (undefined) ? currentUser.uid : undefined) : null;
+  const uid = currentUser !== (null) ? (currentUser !== (undefined) ? currentUser.uid : undefined) : null;
   const [entrylist, setEntrylist] = useState<any[]>([]);
   console.log(currentUser);
   // test only
@@ -85,7 +78,7 @@ function Entries(props: any){
     async function fetchAllEntry() {
       const collectionDest = collection(db, "entrydata");
       console.log(collectionDest);
-      const q = query(collectionDest, where("userid", "==", currentUser?.uid));
+      const q = query(collectionDest, where("userid", "==", currentUser?.uid !== undefined ? currentUser?.uid : 0));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
           console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
@@ -101,9 +94,11 @@ function Entries(props: any){
   return (
       <div>
       <h1>💁‍今までの気持ち💁‍</h1>
-      <ul>{entrylist.map((entry) => (
-            <li>{entry.entry}</li>
-            ))}</ul>
+      <ul>{entrylist.map((entry, index) => (
+            <li key={index}>{entry.entry} / {entry.date.toDate().toString()}</li>
+            ))}
+      </ul>
+      <p>debug: {uid} /entry: {entrylist.length}</p>
       </div>
       )
 }

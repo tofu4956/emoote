@@ -1,7 +1,7 @@
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { User, getAuth, onAuthStateChanged } from "firebase/auth"
-import React, { Props, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import apiData from "./apiKey";
 import 'firebase/auth'
 import 'firebase/app'
@@ -22,6 +22,7 @@ const firebaseConfig = {
   };
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const analytics = getAnalytics(app);
 
 interface Authinterface{

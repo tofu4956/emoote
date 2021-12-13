@@ -79,7 +79,7 @@ export default function CreateEntry(props: any){
     <div className="app">
       <h2> 今の気持ちは？ </h2>
       <Form className="" onSubmit={entrySubmitHandler}>
-      <Form.Control className="form" plaintext readOnly value={selectedEmoji}/>
+      <Form.Control className="form emoji-disp" plaintext readOnly value={selectedEmoji}/>
       <ButtonGroup size="lg" className="mb-2">
         <Button type="submit">これ！</Button>
       <Button variant="warning" onClick={()=>setEmoji("")}>選び直す</Button>

@@ -76,3 +76,9 @@ footer{
   margin-left: auto;
   margin-right: auto;
 }
+
+.emoji-disp {
+  font-size: 48pt;
+  width: 100px;
+  height: 100px;
+}

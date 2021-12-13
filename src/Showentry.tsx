@@ -4,9 +4,11 @@ import 'firebase/auth'
 import 'firebase/app'
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { initializeFirestore, query, where } from "firebase/firestore";
+import { initializeFirestore, query, where} from "firebase/firestore";
 import { collection, getDocs} from "firebase/firestore";
 import { CredentialContext } from "./Authentication";
+import { ListGroup } from "react-bootstrap";
+import format from "date-fns/format";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -85,19 +87,28 @@ function Entries(props: any){
           });
       querySnapshot.forEach((doc) =>
           entry.push(doc.data()));
+      entry.sort((a: any, b: any) => {
+        let x = a.date.seconds;
+        let y = b.date.seconds;
+        return (y - x);
+      });
       setEntrylist(entry);
     };
     fetchAllEntry();
   }, [currentUser, props.history])
-
+  const displayDate = (date: Date) => {
+    return (format(date, 'YYYY年MM月DD日 HH:mm:ss'))
+  }
 
   return (
+    // 仮置
       <div>
       <h1>💁‍今までの気持ち💁‍</h1>
-      <ul>{entrylist.map((entry, index) => (
-            <li key={index}>{entry.entry} / {entry.date.toDate().toString()}</li>
-            ))}
-      </ul>
+      <ListGroup className="list">
+        {entrylist.map((entry, index) => (
+            <ListGroup.Item key={index}>{entry.entry} / {displayDate(entry.date.toDate())}</ListGroup.Item>
+        ))}
+      </ListGroup>
       <p>debug: {uid} /entry: {entrylist.length}</p>
       </div>
       )

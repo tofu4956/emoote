@@ -6,6 +6,7 @@ import { getAnalytics } from "firebase/analytics";
 import apiData from './apiKey';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { CredentialContext } from './Authentication';
+import './App.css';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -52,20 +53,21 @@ function Login(props: any){
       <div className="login">
         <h1>Login</h1>
         <Form onSubmit = {LoginHandler}>
-         <Form.Group className="mb-3" controlId="formBasicEmail">
+         <Form.Group className="form" controlId="formBasicEmail">
            <Form.Label>Email address</Form.Label>
            <Form.Control type="email" placeholder="Enter email" onChange={event => setEmail(event.target.value)}/>
          </Form.Group>
-         <Form.Group className="mb-3" controlId="formBasicPassword">
+         <Form.Group className="form" controlId="formBasicPassword">
            <Form.Label>Password</Form.Label>
            <Form.Control type="password" placeholder="Password" onChange={event => setPassword(event.target.value)}/>
-           </Form.Group>
-           <Form.Group className="mb-3" controlId="formBasicCheckbox">
-             <Form.Check type="checkbox" label="Check me out" />
-           </Form.Group>
-         <Button variant="primary" type="submit">
+          </Form.Group>
+          <br/>
+         <Button className="button" variant="primary" type="submit">
          Login
         </Button>
+        <>
+        <p>debug: Login:example@example.com / password: example</p>
+        </>
        </Form>
       </div>
   );

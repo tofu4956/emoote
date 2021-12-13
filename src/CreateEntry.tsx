@@ -56,7 +56,7 @@ export default function CreateEntry(props: any){
       }, [currentUser, props.history]);
     async function entrySubmitHandler(e: any){
       try{
-        if(split(selectedEmoji).length !== 0){
+        if(split(selectedEmoji).length < 2){
         const docRef = await addDoc(collection(db, "entrydata"), {
           userid: currentUser !== (null) ? (currentUser !== (undefined) ? currentUser.uid : undefined) : null,  
           entry: selectedEmoji,
@@ -71,21 +71,23 @@ export default function CreateEntry(props: any){
         }
       }catch(e){
         console.error("error adding content:", e);
-        alert("error!");
+        alert("error! Please try again");
       }
     e.preventDefault();
   }
   return(
-      <div className="app">
+    <div className="app">
       <h2> 今の気持ちは？ </h2>
-      <Form onSubmit={entrySubmitHandler}>
-      <Form.Control plaintext readOnly value={selectedEmoji}/>
+      <Form className="" onSubmit={entrySubmitHandler}>
+      <Form.Control className="form" plaintext readOnly value={selectedEmoji}/>
       <ButtonGroup size="lg" className="mb-2">
-      <Button type="submit">これ！</Button>
+        <Button type="submit">これ！</Button>
       <Button variant="warning" onClick={()=>setEmoji("")}>選び直す</Button>
       </ButtonGroup>
-      <EmojiPicker {...emojiPickerProps}/>
       </Form>
+      <div className="center">
+        <EmojiPicker {...emojiPickerProps}/>
       </div>
-      )
+    </div>
+  )
 }

@@ -40,14 +40,7 @@ footer{
 }
 .py-3 {
     padding-top: 1rem!important;
-    padding-bottom: 1rem!important;
-}
-.mt-auto {
-    margin-top: auto!important;
-}
-
-.button-data {
-    text-align: right;
+  ;
 }
 @keyframes App-logo-spin {
   from {
@@ -56,4 +49,30 @@ footer{
   to {
     transform: rotate(360deg);
   }
+}
+
+.button {
+  width: 320px;
+  height: 48px;
+}
+
+.form {
+  width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center {
+  display: inline-block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  flex: auto;
+  flex-direction: column;
+}
+
+.list {
+  width: 420px;
+  margin-left: auto;
+  margin-right: auto;
 }

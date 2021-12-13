@@ -60,7 +60,7 @@ export default function CreateEntry(props: any){
       }, [currentUser, props.history]);
     function entrySubmitHandler(e: any){
       try{
-        if(split(selectedEmoji).length < 2){
+        if(split(selectedEmoji).length !== 0 && split(selectedEmoji).length < 2){
         addDoc(collection(db, "entrydata"), {
           userid: currentUser !== (null) ? (currentUser !== (undefined) ? currentUser.uid : undefined) : null,  
           entry: selectedEmoji,

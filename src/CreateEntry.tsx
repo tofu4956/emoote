@@ -30,7 +30,8 @@ const firebaseConfig = {
   };
   // Initialize Firebase
 const firestoreSettings: FirestoreSettings & { useFetchStreams: boolean } = {
-    useFetchStreams: false
+    useFetchStreams: false,
+    experimentalForceLongPolling: true
 };
 const app = initializeApp(firebaseConfig);
 const db = initializeFirestore(app, firestoreSettings);
@@ -57,14 +58,15 @@ export default function CreateEntry(props: any){
       //login detection
       currentUser === null && props.history.push("/login");
       }, [currentUser, props.history]);
-    async function entrySubmitHandler(e: any){
+    function entrySubmitHandler(e: any){
       try{
         if(split(selectedEmoji).length < 2){
-        await addDoc(collection(db, "entrydata"), {
+        addDoc(collection(db, "entrydata"), {
           userid: currentUser !== (null) ? (currentUser !== (undefined) ? currentUser.uid : undefined) : null,  
           entry: selectedEmoji,
           date: new Date()
         });
+        props.history.push("/entry");
         }else if(split(selectedEmoji).length === 0){
         }else{
           throw new Error("lengthError: If you change the element using Inspector tool or bot, please don't. Breaking the concept of application is not welcome.");

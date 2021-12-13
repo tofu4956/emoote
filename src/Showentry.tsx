@@ -26,7 +26,8 @@ apiKey: apiData.apiKey,
 // Initialize Firebase
 
 const firestoreSettings: FirestoreSettings & { useFetchStreams: boolean } = {
-	useFetchStreams: false
+	useFetchStreams: false,
+  experimentalForceLongPolling: true
 };
 const app = initializeApp(firebaseConfig);
 const db = initializeFirestore(app, firestoreSettings);

@@ -9,6 +9,7 @@ import { collection, getDocs} from "firebase/firestore";
 import { CredentialContext } from "./Authentication";
 import { ListGroup } from "react-bootstrap";
 import format from "date-fns/format";
+import {FaTwitter} from "react-icons/fa";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -104,6 +105,11 @@ function Entries(props: any){
   const displayDate = (date: Date) => {
     return (format(date, 'YYYY年MM月DD日 HH:mm:ss'))
   }
+  const createShareButton = (emoji: string) => {
+    const tweet_string = "今日の私の気持ちは... " + emoji;
+    const tweet_href = "https://twitter.com/share?url=https://emoote.vercel.app/top&text=" + tweet_string + ""
+    return (<a href={tweet_href}><FaTwitter /></a>)
+  }
 
   return (
     // 仮置
@@ -111,7 +117,7 @@ function Entries(props: any){
       <h1>💁‍今までの気持ち💁‍</h1>
       <ListGroup className="list">
         {entrylist.map((entry, index) => (
-            <ListGroup.Item key={index}><span className="emoji-list-disp">{entry.entry}</span> / {displayDate(entry.date.toDate())}</ListGroup.Item>
+            <ListGroup.Item key={index}><span className="emoji-list-disp">{entry.entry}</span> / {displayDate(entry.date.toDate())} {createShareButton(entry.entry)}</ListGroup.Item>
         ))}
       </ListGroup>
       <p>debug: {uid} /entry: {entrylist.length}</p>

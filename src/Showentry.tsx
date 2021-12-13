@@ -4,7 +4,7 @@ import 'firebase/auth'
 import 'firebase/app'
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { initializeFirestore, query, where} from "firebase/firestore";
+import { FirestoreSettings, initializeFirestore, query, where} from "firebase/firestore";
 import { collection, getDocs} from "firebase/firestore";
 import { CredentialContext } from "./Authentication";
 import { ListGroup } from "react-bootstrap";
@@ -24,8 +24,12 @@ apiKey: apiData.apiKey,
         measurementId: apiData.measurementId
 };
 // Initialize Firebase
+
+const firestoreSettings: FirestoreSettings & { useFetchStreams: boolean } = {
+	useFetchStreams: false
+};
 const app = initializeApp(firebaseConfig);
-const db = initializeFirestore(app, {experimentalForceLongPolling: true});
+const db = initializeFirestore(app, firestoreSettings);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const analytics = getAnalytics(app);
 

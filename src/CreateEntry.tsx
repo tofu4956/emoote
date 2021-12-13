@@ -9,7 +9,7 @@ import './App.css';
 import { Form, Button, ButtonGroup } from 'react-bootstrap';
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { initializeFirestore } from "firebase/firestore";
+import { FirestoreSettings, initializeFirestore } from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore";
 import apiData from "./apiKey";
 import split from "graphemesplit";
@@ -29,8 +29,11 @@ const firebaseConfig = {
     measurementId: apiData.measurementId
   };
   // Initialize Firebase
+const firestoreSettings: FirestoreSettings & { useFetchStreams: boolean } = {
+    useFetchStreams: false
+};
 const app = initializeApp(firebaseConfig);
-const db = initializeFirestore(app, {experimentalForceLongPolling: true});
+const db = initializeFirestore(app, firestoreSettings);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const analytics = getAnalytics(app);
 

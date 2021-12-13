@@ -111,7 +111,7 @@ function Entries(props: any){
       <h1>💁‍今までの気持ち💁‍</h1>
       <ListGroup className="list">
         {entrylist.map((entry, index) => (
-            <ListGroup.Item key={index}>{entry.entry} / {displayDate(entry.date.toDate())}</ListGroup.Item>
+            <ListGroup.Item key={index}><span className="emoji-list-disp">{entry.entry}</span> / {displayDate(entry.date.toDate())}</ListGroup.Item>
         ))}
       </ListGroup>
       <p>debug: {uid} /entry: {entrylist.length}</p>

@@ -82,3 +82,7 @@ footer{
   width: 100px;
   height: 100px;
 }
+
+.emoji-list-disp {
+  font-size: 4em;
+}

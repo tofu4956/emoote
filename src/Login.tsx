@@ -21,14 +21,19 @@ const firebaseConfig = {
   appId: apiData.appId,
   measurementId: apiData.measurementId
 };
+
+interface Logininterface {
+  email: string;
+  password: string;
+}
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const analytics = getAnalytics(app);
 
 function Login(props: any){
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<Logininterface["email"]>('');
+  const [password, setPassword] = useState<Logininterface["password"]>('');
   const {currentUser} = useContext(CredentialContext);
   const LoginHandler = (e :any) =>{
     const auth = getAuth();

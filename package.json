@@ -30,13 +30,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "generate": "graphql-codegen --config codegen.yml"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "cy:open": "cypress open"
   },
   "browserslist": {
     "production": [
@@ -52,6 +46,8 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.8",
+    "cypress": "^9.2.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "react-scripts": "4.0.3"
   }
 }

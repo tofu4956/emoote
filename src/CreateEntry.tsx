@@ -40,7 +40,7 @@ const analytics = getAnalytics(app);
 
 export default function CreateEntry(props: any){
   const {currentUser} = useContext(CredentialContext);
-  const [selectedEmoji, setEmoji] =  useState("");
+  const [selectedEmoji, setEmoji] = useState("");
   // need reference to same function to throttle
   const onEmojiSelect = (emoji: EmojiObject) => {
     const nativeEmoji = unifiedToNative(emoji.unicode);
